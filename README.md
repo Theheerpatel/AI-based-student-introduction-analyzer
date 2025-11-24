@@ -61,20 +61,25 @@ student-introduction-analyzer/
 ```bash
 git clone https://github.com/Theheerpatel/AI-based-student-introduction-analyzer.git
 cd AI-based-student-introduction-analyzer
+```
 
 ### 2️⃣ Create & activate a virtual environment
 ```bash
 python -m venv venv
 source venv/bin/activate        # For Windows: venv\Scripts\activate
+```
 
 ### 3️⃣ Install dependencies
 ```bash
 pip install -r requirements.txt
+```
 
 ### 4️⃣ Run the application
 ```bash
 python app.py
+```
 
 ### 5️⃣ Open in the browser
 ```bash
 http://localhost:5000
+```
