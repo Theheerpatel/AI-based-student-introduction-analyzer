@@ -52,5 +52,5 @@ student-introduction-analyzer/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Theheerpatel/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/Theheerpatel/AI-based-student-introduction-analyzer.git
+   cd AI-based-student-introduction-analyzer
