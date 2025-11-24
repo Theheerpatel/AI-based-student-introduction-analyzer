@@ -83,3 +83,30 @@ python app.py
 ```bash
 http://localhost:5000
 ```
+
+---
+
+📋 Usage Guide
+Paste or type the student’s introduction text
+Enter the speech duration (seconds)
+Click Analyze Introduction
+Review detailed analytics and suggestions
+
+---
+
+### 🎯 Scoring System
+| Criteria |	Weight |	Description |
+|----------|------------|-----------|
+| Keyword Presence |	30% |	Checks essential intro elements |
+| Sentiment |	15% |	Measures emotional positivity |
+| Filler Words |	15% |	Penalizes excessive fillers |
+| Speech Rate |	10% | Evaluates pace (WPM) |
+| Grammar Accuracy |	10% |	Spelling & grammar |
+| Vocabulary Richness |	10% |	Word diversity & complexity |
+| Salutation |	5% |	Greeting quality |
+| Flow & Structure |	5% |	Logical organization |
+
+### 💡 Suggestions and contributions are welcome!
+
+###📌 Author: Heer Patel
+🔗 GitHub: https://github.com/Theheerpatel
