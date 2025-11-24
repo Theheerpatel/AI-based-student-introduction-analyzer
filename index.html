@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speech Analysis Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.8;
+            font-size: 1.1em;
+        }
+
+        .input-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .sample-text-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .sample-text-btn:hover {
+            background: #218838;
+        }
+
+        .duration-input {
+            width: 120px;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            display: block;
+            margin: 20px auto 0;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results {
+            display: none;
+            padding: 30px;
+        }
+
+        .overall-score {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .score-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .score-label {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .score-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-collapse: collapse;
+        }
+
+        .score-table th {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .score-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .score-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .score-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .score-value {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .score-total {
+            background: #e9ecef !important;
+            font-weight: bold;
+        }
+
+        .criteria-section {
+            margin-bottom: 30px;
+        }
+
+        .criteria-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .criteria-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .criteria-header {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .criteria-header:hover {
+            background: #e9ecef;
+        }
+
+        .criteria-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .criteria-score {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .criteria-details {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .criteria-details.open {
+            padding: 20px;
+            max-height: 1000px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .keyword-tag {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 2px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        .error-tag {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 2px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        .filler-tag {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 2px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+
+        .sentence-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #e9ecef;
+        }
+
+        .sentence-item.positive {
+            border-left-color: #28a745;
+        }
+
+        .sentence-item.neutral {
+            border-left-color: #ffc107;
+        }
+
+        .sentence-item.negative {
+            border-left-color: #dc3545;
+        }
+
+        .sentence-text {
+            font-style: italic;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        .sentiment-scores {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .sentiment-score {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            border: 1px solid #e9ecef;
+        }
+
+        .sentiment-positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .sentiment-neutral {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .sentiment-negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .sentiment-overall {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .toggle-icon {
+            margin-left: auto;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .sentiment-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+            display: flex;
+        }
+
+        .sentiment-bar-positive {
+            height: 100%;
+            background: #28a745;
+        }
+
+        .sentiment-bar-neutral {
+            height: 100%;
+            background: #ffc107;
+        }
+
+        .sentiment-bar-negative {
+            height: 100%;
+            background: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Speech Analysis Tool</h1>
+            <p>Analyze student introductions with AI-powered scoring</p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="transcript">Paste Your Introduction Text:</label>
+                <textarea id="transcript" class="text-input" placeholder="Paste your self-introduction text here..."></textarea>
+                <button class="sample-text-btn" onclick="loadSampleText()">📋 Load Sample Text</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="duration">Duration (seconds):</label>
+                <input type="number" id="duration" class="duration-input" value="52" min="1" max="300">
+            </div>
+            
+            <button class="analyze-btn" onclick="analyzeTranscript()">🔍 Analyze Introduction</button>
+        </div>
+
+        <div id="results" class="results">
+            <div class="overall-score">
+                <div class="score-number" id="overallScoreNumber">0%</div>
+                <div class="score-label" id="overallScoreLabel">Overall Score</div>
+            </div>
+
+            <!-- Score Table -->
+            <table class="score-table" id="scoreTable">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Score</th>
+                        <th>Weight</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody id="scoreTableBody">
+                    <!-- Scores will be populated here -->
+                </tbody>
+            </table>
+
+            <div class="criteria-section">
+                <h2 class="criteria-title">📊 Detailed Analysis</h2>
+                
+                <div id="criteriaContainer">
+                    <!-- Criteria items will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample text to load
+        const sampleText = `Hello everyone, myself Muskan, studying in class 8th B section from Christ Public School. I am 13 years old. I live with my family. There are 3 people in my family, me, my mother and my father. One special thing about my family is that they are very kind hearted to everyone and soft spoken. One thing I really enjoy is play, playing cricket and taking wickets. A fun fact about me is that I see in mirror and talk by myself. One thing people don't know about me is that I once stole a toy from one of my cousin. My favorite subject is science because it is very interesting. Through science I can explore the whole world and make the discoveries and improve the lives of others. Thank you for listening.`;
+
+        function loadSampleText() {
+            document.getElementById('transcript').value = sampleText;
+        }
+
+        async function analyzeTranscript() {
+            const transcript = document.getElementById('transcript').value;
+            const duration = document.getElementById('duration').value;
+            
+            if (!transcript.trim()) {
+                alert('Please enter some text to analyze');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('overallScoreNumber').textContent = 'Analyzing...';
+                document.getElementById('overallScoreLabel').textContent = 'Please wait';
+                document.getElementById('scoreTableBody').innerHTML = '<tr><td colspan="4" style="text-align: center;">Analyzing...</td></tr>';
+                document.getElementById('criteriaContainer').innerHTML = '<div style="text-align: center; padding: 40px;">Analyzing your text...</div>';
+
+                const response = await fetch('/score', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({transcript, duration})
+                });
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert('Error: ' + result.error);
+                    return;
+                }
+                
+                displayResults(result);
+                
+            } catch (error) {
+                alert('Error: ' + error);
+            }
+        }
+
+        function displayResults(result) {
+            // Update overall score
+            document.getElementById('overallScoreNumber').textContent = result.overall_score + '%';
+            document.getElementById('overallScoreLabel').textContent = 'Overall Score | ' + result.word_count + ' words';
+
+            // Populate score table
+            let tableHTML = '';
+            let totalScore = 0;
+            let totalWeight = 0;
+
+            result.criteria_order.forEach(criterion => {
+                const score = result.criteria_scores[criterion];
+                const weight = result.weights[criterion];
+                const percentage = Math.round((score / weight) * 100);
+                
+                totalScore += score;
+                totalWeight += weight;
+
+                tableHTML += `
+                    <tr>
+                        <td>${criterion}</td>
+                        <td class="score-value">${score}/${weight}</td>
+                        <td>${weight}</td>
+                        <td>${percentage}%</td>
+                    </tr>
+                `;
+            });
+
+            // Add total row
+            tableHTML += `
+                <tr class="score-total">
+                    <td><strong>Total Score</strong></td>
+                    <td class="score-value"><strong>${totalScore}/${totalWeight}</strong></td>
+                    <td><strong>${totalWeight}</strong></td>
+                    <td><strong>${result.overall_score}%</strong></td>
+                </tr>
+            `;
+
+            document.getElementById('scoreTableBody').innerHTML = tableHTML;
+
+            // Generate criteria items
+            let criteriaHTML = '';
+            
+            // Basic Statistics
+            criteriaHTML += createCriteriaItem(
+                'Basic Statistics',
+                '',
+                createBasicStats(result.detailed_analysis),
+                false
+            );
+
+            // Keyword Analysis
+            criteriaHTML += createCriteriaItem(
+                'Keyword Analysis',
+                result.criteria_scores['Keyword Presence'] + '/' + result.weights['Keyword Presence'],
+                createKeywordAnalysis(result.detailed_analysis)
+            );
+
+            // Flow Analysis
+            criteriaHTML += createCriteriaItem(
+                'Flow & Structure',
+                result.criteria_scores['Flow'] + '/' + result.weights['Flow'],
+                createFlowAnalysis(result.detailed_analysis, result.criteria_scores['Flow'])
+            );
+
+            // Speech Rate
+            criteriaHTML += createCriteriaItem(
+                'Speech Rate',
+                result.criteria_scores['Speech Rate'] + '/' + result.weights['Speech Rate'],
+                createSpeechRateAnalysis(result.detailed_analysis)
+            );
+
+            // Grammar & Spelling
+            criteriaHTML += createCriteriaItem(
+                'Grammar & Spelling',
+                result.criteria_scores['Grammar'] + '/' + result.weights['Grammar'],
+                createGrammarAnalysis(result.detailed_analysis)
+            );
+
+            // Filler Words
+            criteriaHTML += createCriteriaItem(
+                'Filler Words',
+                result.criteria_scores['Filler Words'] + '/' + result.weights['Filler Words'],
+                createFillerAnalysis(result.detailed_analysis)
+            );
+
+            // Vocabulary
+            criteriaHTML += createCriteriaItem(
+                'Vocabulary',
+                result.criteria_scores['Vocabulary'] + '/' + result.weights['Vocabulary'],
+                createVocabularyAnalysis(result.detailed_analysis)
+            );
+
+            // Sentiment Analysis
+            criteriaHTML += createCriteriaItem(
+                'Sentiment Analysis',
+                result.criteria_scores['Sentiment'] + '/' + result.weights['Sentiment'],
+                createSentimentAnalysis(result.detailed_analysis)
+            );
+
+            document.getElementById('criteriaContainer').innerHTML = criteriaHTML;
+
+            // Add click handlers for dropdowns
+            document.querySelectorAll('.criteria-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const details = this.nextElementSibling;
+                    const icon = this.querySelector('.toggle-icon');
+                    details.classList.toggle('open');
+                    icon.textContent = details.classList.contains('open') ? '−' : '+';
+                });
+            });
+        }
+
+        function createCriteriaItem(title, score, content, showScore = true) {
+            return `
+                <div class="criteria-item">
+                    <div class="criteria-header">
+                        <div class="criteria-name">${title}</div>
+                        ${showScore ? `<div class="criteria-score">${score}</div>` : ''}
+                        <div class="toggle-icon">+</div>
+                    </div>
+                    <div class="criteria-details">
+                        ${content}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createBasicStats(analysis) {
+            return `
+                <div class="detail-item">
+                    <div class="detail-title">Word Count</div>
+                    <div>${analysis.word_count} words</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-title">Sentence Count</div>
+                    <div>${analysis.sentence_count} sentences</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-title">Average Words per Sentence</div>
+                    <div>${(analysis.word_count / analysis.sentence_count).toFixed(1)} words/sentence</div>
+                </div>
+            `;
+        }
+
+        function createKeywordAnalysis(analysis) {
+            let html = '<div class="detail-item"><div class="detail-title">Must-Have Keywords Found:</div>';
+            
+            if (analysis.must_have_found && analysis.must_have_found.length > 0) {
+                analysis.must_have_found.forEach(keyword => {
+                    html += `<span class="keyword-tag">${keyword}</span>`;
+                });
+            } else {
+                html += '<div>No must-have keywords found</div>';
+            }
+            
+            html += '</div><div class="detail-item"><div class="detail-title">Good-to-Have Keywords Found:</div>';
+            
+            if (analysis.good_to_have_found && analysis.good_to_have_found.length > 0) {
+                analysis.good_to_have_found.forEach(keyword => {
+                    html += `<span class="keyword-tag">${keyword}</span>`;
+                });
+            } else {
+                html += '<div>No good-to-have keywords found</div>';
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        function createFlowAnalysis(analysis, flowScore) {
+            return `
+                <div class="detail-item">
+                    <div class="detail-title">Structure Analysis</div>
+                    <div>${flowScore === 5 ? '✅ Excellent flow: Salutation → Basic Details → Additional Details → Closing' : 
+                          flowScore === 3 ? '⚠️ Good flow but missing some sections' : 
+                          '❌ Poor flow structure'}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-title">Sentences Processed</div>
+                    <div>${analysis.sentence_count} sentences analyzed for proper order</div>
+                </div>
+            `;
+        }
+
+        function createSpeechRateAnalysis(analysis) {
+            const category = analysis.wpm > 161 ? 'Too Fast' :
+                           analysis.wpm >= 141 ? 'Fast' :
+                           analysis.wpm >= 111 ? 'Ideal' :
+                           analysis.wpm >= 81 ? 'Slow' : 'Too Slow';
+            
+            return `
+                <div class="detail-item">
+                    <div class="detail-title">Words Per Minute (WPM)</div>
+                    <div>${analysis.wpm} WPM - ${category}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-title">Recommended Range</div>
+                    <div>111-140 WPM (Ideal speaking pace)</div>
+                </div>
+            `;
+        }
+
+        function createGrammarAnalysis(analysis) {
+            let html = `
+                <div class="detail-item">
+                    <div class="detail-title">Spelling Errors</div>
+                    <div>${analysis.spelling_errors} errors found (${analysis.error_rate}% error rate)</div>
+                </div>
+            `;
+            
+            if (analysis.misspelled_words && analysis.misspelled_words.length > 0) {
+                html += '<div class="detail-item"><div class="detail-title">Misspelled Words:</div>';
+                analysis.misspelled_words.forEach(word => {
+                    html += `<span class="error-tag">${word}</span>`;
+                });
+                html += '</div>';
+            }
+            
+            return html;
+        }
+
+        function createFillerAnalysis(analysis) {
+            let html = `
+                <div class="detail-item">
+                    <div class="detail-title">Filler Word Analysis</div>
+                    <div>Found ${analysis.filler_count} filler words (${analysis.filler_rate}% of total words)</div>
+                </div>
+            `;
+            
+            if (analysis.filler_words_found && analysis.filler_words_found.length > 0) {
+                html += '<div class="detail-item"><div class="detail-title">Filler Words Detected:</div>';
+                analysis.filler_words_found.forEach(word => {
+                    html += `<span class="filler-tag">${word}</span>`;
+                });
+                html += '</div>';
+            }
+            
+            return html;
+        }
+
+        function createVocabularyAnalysis(analysis) {
+            const richness = analysis.ttr >= 0.7 ? 'Rich' :
+                           analysis.ttr >= 0.5 ? 'Good' :
+                           analysis.ttr >= 0.3 ? 'Average' : 'Basic';
+            
+            return `
+                <div class="detail-item">
+                    <div class="detail-title">Vocabulary Richness</div>
+                    <div>Type-Token Ratio (TTR): ${analysis.ttr} - ${richness} Vocabulary</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-title">Unique Words</div>
+                    <div>${analysis.unique_words} unique words out of ${analysis.word_count} total words</div>
+                </div>
+            `;
+        }
+
+        function createSentimentAnalysis(analysis) {
+            const sentiment = analysis.sentiment;
+            if (!sentiment) return '<div>Sentiment analysis not available</div>';
+            
+            const overallTone = sentiment.compound > 0.05 ? 'Positive' :
+                              sentiment.compound < -0.05 ? 'Negative' : 'Neutral';
+            
+            let html = `
+                <div class="detail-item">
+                    <div class="detail-title">Overall Sentiment</div>
+                    <div>${overallTone} Tone (Score: ${(sentiment.compound * 100).toFixed(1)}%)</div>
+                    <div class="sentiment-bar">
+                        <div class="sentiment-bar-positive" style="width: ${sentiment.positive * 100}%"></div>
+                        <div class="sentiment-bar-neutral" style="width: ${sentiment.neutral * 100}%"></div>
+                        <div class="sentiment-bar-negative" style="width: ${sentiment.negative * 100}%"></div>
+                    </div>
+                    <div style="font-size: 0.9em; color: #666;">
+                        Positive: ${(sentiment.positive * 100).toFixed(1)}% | 
+                        Neutral: ${(sentiment.neutral * 100).toFixed(1)}% | 
+                        Negative: ${(sentiment.negative * 100).toFixed(1)}%
+                    </div>
+                </div>
+            `;
+
+            // Add sentence-by-sentence sentiment analysis
+            if (analysis.sentence_sentiments && analysis.sentence_sentiments.length > 0) {
+                html += '<div class="detail-item">';
+                html += '<div class="detail-title">Sentence-by-Sentence Analysis</div>';
+                
+                analysis.sentence_sentiments.forEach((sentenceData, index) => {
+                    const sentimentClass = sentenceData.compound > 0.05 ? 'positive' : 
+                                         sentenceData.compound < -0.05 ? 'negative' : 'neutral';
+                    
+                    html += `
+                        <div class="sentence-item ${sentimentClass}">
+                            <div class="sentence-text">"${sentenceData.sentence}"</div>
+                            <div class="sentiment-scores">
+                                <div class="sentiment-score sentiment-positive">Positive: ${(sentenceData.positive * 100).toFixed(1)}%</div>
+                                <div class="sentiment-score sentiment-neutral">Neutral: ${(sentenceData.neutral * 100).toFixed(1)}%</div>
+                                <div class="sentiment-score sentiment-negative">Negative: ${(sentenceData.negative * 100).toFixed(1)}%</div>
+                                <div class="sentiment-score sentiment-overall">Overall: ${(sentenceData.compound * 100).toFixed(1)}%</div>
+                            </div>
+                            <div class="sentiment-bar">
+                                <div class="sentiment-bar-positive" style="width: ${sentenceData.positive * 100}%"></div>
+                                <div class="sentiment-bar-neutral" style="width: ${sentenceData.neutral * 100}%"></div>
+                                <div class="sentiment-bar-negative" style="width: ${sentenceData.negative * 100}%"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            }
+            
+            return html;
+        }
+    </script>
+</body>
+</html>
