@@ -41,8 +41,8 @@ A Flask web application that analyzes student self-introductions using multiple 
 ## 📁 Project Structure
 student-introduction-analyzer/
 │
-├── app.py # Main Flask application
-├── requirements.txt # Python dependencies
+-├── app.py # Main Flask application
+-├── requirements.txt # Python dependencies
 ├── Sample text for case study.txt # Sample text for testing
 ├── index.html # Frontend interface
 └── README.md # Project documentation
