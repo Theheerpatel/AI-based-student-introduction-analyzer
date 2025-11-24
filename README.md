@@ -54,3 +54,36 @@ student-introduction-analyzer/
    ```bash
    git clone https://github.com/Theheerpatel/AI-based-student-introduction-analyzer.git
    cd AI-based-student-introduction-analyzer
+
+Create virtual environment
+
+bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+Install dependencies
+
+bash
+pip install -r requirements.txt
+Run the application
+
+bash
+python app.py
+Access the application
+Open http://localhost:5000 in your browser
+📋 Usage
+
+Paste Introduction Text: Enter or paste a student's self-introduction
+Set Duration: Input the speech duration in seconds
+Analyze: Click "Analyze Introduction" to get comprehensive results
+Review: Examine detailed scores and improvement suggestions
+🎯 Scoring System
+
+Criteria	Weight	Description
+Keyword Presence	30%	Essential introduction elements
+Sentiment	15%	Positive emotional tone
+Filler Words	15%	Minimal unnecessary words
+Speech Rate	10%	Optimal speaking pace
+Grammar	10%	Spelling and grammar accuracy
+Vocabulary	10%	Word diversity and richness
+Salutation	5%	Effective greeting
+Flow	5%	Logical structure
