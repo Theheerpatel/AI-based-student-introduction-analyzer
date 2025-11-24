@@ -45,13 +45,13 @@ A Flask web application that analyzes student self-introductions using multiple 
 
 ## 📁 Project Structure
 
-student-introduction-analyzer/
-│
-├── app.py # Main Flask application
-├── requirements.txt # Python dependencies
-├── Sample text for case study.txt # Sample testing file
-├── index.html # Frontend UI
-└── README.md # Project documentation
+student-introduction-analyzer/  
+│  
+├── app.py # Main Flask application  
+├── requirements.txt # Python dependencies  
+├── Sample text for case study.txt # Sample testing file  
+├── index.html # Frontend UI  
+└── README.md # Project documentation  
 
 ---
 
@@ -108,5 +108,5 @@ Review detailed analytics and suggestions
 
 ### 💡 Suggestions and contributions are welcome!
 
-###📌 Author: Heer Patel
+###📌 Author: Heer Patel  
 🔗 GitHub: https://github.com/Theheerpatel
