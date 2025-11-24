@@ -365,3 +365,9 @@ def score_transcript():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+### IF YOU WANT TO RUN IN YOUR LOCAL PC USE THIS ###
+'''
+if __name__ == '__main__':
+    app.run(debug=True)
+'''
